@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau de Bord – Trafic Web</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <!-- Mobile Menu Toggle -->
+  <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-chart-line logo-icon"></i>
+      <span class="logo-text">WebAnalytics</span>
+    </div>
+    <nav class="sidebar-nav" aria-label="Navigation principale">
+      <ul>
+        <li>
+          <a href="#" class="nav-link active" data-section="overview">
+            <i class="fas fa-th-large"></i><span>Vue d'ensemble</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="traffic">
+            <i class="fas fa-signal"></i><span>Trafic</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="keywords">
+            <i class="fas fa-key"></i><span>Mots-clés</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="pages">
+            <i class="fas fa-file-alt"></i><span>Pages</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="search-console">
+            <i class="fas fa-search"></i><span>Console de Recherche</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-section="ai-insights">
+            <i class="fas fa-robot"></i><span>IA Insights</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <span>&copy; 2026 WebAnalytics</span>
+    </div>
+  </aside>
+
+  <!-- Overlay for mobile sidebar -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h1 class="page-title" id="pageTitle">Vue d'ensemble</h1>
+      <div class="period-selector">
+        <label for="periodSelect" class="sr-only">Période</label>
+        <select id="periodSelect">
+          <option value="7">7 derniers jours</option>
+          <option value="14">14 derniers jours</option>
+          <option value="30" selected>30 derniers jours</option>
+          <option value="90">90 derniers jours</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- KPI Cards -->
+    <section class="kpi-cards" aria-label="Indicateurs clés">
+      <div class="kpi-card kpi-organic">
+        <div class="kpi-icon"><i class="fas fa-leaf"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiOrganic">0</span>
+          <span class="kpi-label">Organique</span>
+        </div>
+        <span class="kpi-trend up" id="trendOrganic">+0%</span>
+      </div>
+      <div class="kpi-card kpi-direct">
+        <div class="kpi-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiDirect">0</span>
+          <span class="kpi-label">Direct</span>
+        </div>
+        <span class="kpi-trend up" id="trendDirect">+0%</span>
+      </div>
+      <div class="kpi-card kpi-referral">
+        <div class="kpi-icon"><i class="fas fa-link"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiReferral">0</span>
+          <span class="kpi-label">Referral</span>
+        </div>
+        <span class="kpi-trend up" id="trendReferral">+0%</span>
+      </div>
+      <div class="kpi-card kpi-social">
+        <div class="kpi-icon"><i class="fas fa-share-alt"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-value" id="kpiSocial">0</span>
+          <span class="kpi-label">Social</span>
+        </div>
+        <span class="kpi-trend up" id="trendSocial">+0%</span>
+      </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-section">
+      <!-- Line Chart -->
+      <div class="chart-container chart-line">
+        <div class="chart-header">
+          <h2>Trafic par Source</h2>
+          <div class="chart-type-toggle">
+            <button class="chart-btn active" data-type="line" aria-label="Graphique linéaire">
+              <i class="fas fa-chart-line"></i>
+            </button>
+            <button class="chart-btn" data-type="bar" aria-label="Graphique en barres">
+              <i class="fas fa-chart-bar"></i>
+            </button>
+          </div>
+        </div>
+        <canvas id="trafficChart" aria-label="Graphique du trafic par source"></canvas>
+      </div>
+
+      <!-- Doughnut Chart -->
+      <div class="chart-container chart-doughnut">
+        <div class="chart-header">
+          <h2>Répartition des Sources</h2>
+        </div>
+        <canvas id="doughnutChart" aria-label="Répartition du trafic"></canvas>
+        <div class="doughnut-legend" id="doughnutLegend"></div>
+      </div>
+    </section>
+
+    <!-- Table Section -->
+    <section class="table-section">
+      <div class="table-header">
+        <h2>Détails du Trafic</h2>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Visites</th>
+              <th>Part (%)</th>
+              <th>Tendance</th>
+            </tr>
+          </thead>
+          <tbody id="trafficTableBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
